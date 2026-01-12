@@ -1,10 +1,10 @@
-import { useForm } from "react-hook-form";
-import type z from "zod";
-import { signInSchema } from "./schemas/sign-in.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FormInput } from "@/components/form/form-input";
 import { Button } from "@/components/ui/button";
 import { useSignInMutation } from "@/services/api/auth/mutations";
+import { signInSchema } from "@/services/api/auth/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import type z from "zod";
 
 export function SignIn() {
   const { control, handleSubmit } = useForm<z.infer<typeof signInSchema>>({

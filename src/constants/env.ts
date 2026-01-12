@@ -1,1 +1,1 @@
-export const BASE_API_URL = "https://n8n.marcusgajozo.com/webhook";
+export const API_BASE_URL = "https://n8n.marcusgajozo.com/webhook";
