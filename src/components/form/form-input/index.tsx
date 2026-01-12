@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-interface IFormInputProps<T extends FieldValues>
+interface FormInputProps<T extends FieldValues>
   extends React.ComponentProps<typeof Input> {
   control: Control<T>;
   name: Path<T>;
@@ -27,7 +27,7 @@ export function FormInput<T extends FieldValues>({
   description,
   onChange,
   ...inputProps
-}: IFormInputProps<T>) {
+}: FormInputProps<T>) {
   return (
     <Controller
       name={name}
