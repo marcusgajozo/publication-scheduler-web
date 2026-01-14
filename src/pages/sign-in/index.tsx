@@ -12,7 +12,7 @@ export function SignIn() {
   const [error, setError] = useState<string | null>(null);
   const router = useNavigate();
 
-  const { control, handleSubmit } = useForm<z.infer<typeof signInSchema>>({
+  const { control, handleSubmit } = useForm<z.input<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
   });
 
@@ -24,8 +24,7 @@ export function SignIn() {
         router("/");
       },
       onError(error) {
-        console.log({ error });
-        setError(error.name);
+        setError(error.message);
       },
     });
   });
