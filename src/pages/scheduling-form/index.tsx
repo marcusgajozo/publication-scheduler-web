@@ -11,6 +11,8 @@ import {
 import { schedulingFormSchema } from "./schema";
 import { FormTextarea } from "@/components/form/form-textarea";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 export function SchedulingForm() {
   const { control, watch, handleSubmit } = useForm<
@@ -41,27 +43,30 @@ export function SchedulingForm() {
               name="isRecurrent"
               label="Is Recurrent"
             />
-            <div className="flex gap-2 md:flex-row md:flex">
-              <FormInput
-                label="Scheduled Date"
-                control={control}
-                name="scheduledDate"
-                type="date"
-              />
-              <FormInput
-                label="Scheduled Hour"
-                control={control}
-                name="scheduleHour"
-                type="time"
-              />
-            </div>
+            <FormInput
+              label="Scheduled Datetime"
+              control={control}
+              name="scheduledDatetime"
+              type="datetime-local"
+            />
           </>
         )}
         <div>Platforms</div>
-        <div className="flex gap-2">
-          <FormCheckbox control={control} name="publishNow" label="Whatsapp" />
-          <FormCheckbox control={control} name="publishNow" label="Facebook" />
-          <FormCheckbox control={control} name="publishNow" label="Instagram" />
+        <div className="flex items-center justify-between">
+          <div className="flex gap-2">
+            <div className="flex items-center gap-2">
+              <Checkbox id="whatsapp" />
+              <Label htmlFor="whatsapp">Whatsapp</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox id="facebook" />
+              <Label htmlFor="facebook">Facebook</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox id="instagram" />
+              <Label htmlFor="instagram">Instagram</Label>
+            </div>
+          </div>
         </div>
         <FormSelect
           control={control}
@@ -71,7 +76,7 @@ export function SchedulingForm() {
         />
         <FormSelect
           control={control}
-          name="typeOfContent"
+          name="typeOfMedia"
           label="Type of Media"
           selectItems={OPTIONS_TYPE_OF_MEDIA}
         />

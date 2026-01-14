@@ -3,8 +3,7 @@ import z from "zod";
 export const schedulingFormSchema = z.object({
   title: z.string(),
   publishNow: z.boolean(),
-  scheduledDate: z.string().optional(),
-  scheduleHour: z.string().optional(),
+  scheduledDatetime: z.date().optional(),
   isRecurrent: z.boolean(),
   platforms: z.array(z.enum(["facebook", "instagram", "whatsapp"])),
   typeOfContent: z.enum(["post", "reels", "carousel"]),
