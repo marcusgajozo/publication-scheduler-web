@@ -1,27 +1,27 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-interface LoginState {
+interface AuthState {
   token: string | null;
 }
 
-interface LoginActions {
-  signIn: (token: string) => void;
-  logout: () => void;
+interface AuthActions {
+  saveToken: (token: string) => void;
+  deleteToken: () => void;
 }
 
 const INITIAL_STATE = {
   token: null,
 };
 
-export const useAuthStore = create<LoginState & LoginActions>()(
+export const useAuthStore = create<AuthState & AuthActions>()(
   devtools(
     persist(
       (set) => ({
         ...INITIAL_STATE,
 
-        signIn: (token) => set({ token }),
-        logout: () => set(INITIAL_STATE),
+        saveToken: (token) => set({ token }),
+        deleteToken: () => set(INITIAL_STATE),
       }),
       {
         name: "auth-storage",

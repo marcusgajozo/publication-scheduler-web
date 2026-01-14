@@ -1,12 +1,11 @@
 import { API_BASE_URL } from "@/constants/env";
-
-const TOKEN_KEY = "auth_token";
+import { useAuthStore } from "@/stores/use-auth-store";
 
 export async function clientHttp<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = localStorage.getItem(TOKEN_KEY);
+  const token = useAuthStore.getState().token;
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
