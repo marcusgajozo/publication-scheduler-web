@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+model User {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  email        String @unique
+  name         String
+  passwordHash String @map("password_hash")
+
+  memberId String? @unique
+  member   Member? @relation(fields: [memberId], references: [id])
+
+  churchId String?
+  church   Church? @relation(fields: [churchId], references: [id])
+
+  @@map("users")
+}
+
+model Church {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  name   String
+  active Boolean @default(true)
+
+  users      User[]
+  members    Member[]
+  visitors   Visitor[]
+  ministries Ministry[]
+  songs      Song[]
+  services   Service[]
+
+  @@map("churches")
+}
+
+model Member {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  name        String
+  phone       String?
+  dateOfBirth DateTime @map("date_of_birth")
+  isBaptized  Boolean  @default(false) @map("is_baptized")
+
+  user User?
+
+  maritalStatus MaritalStatus @default(SINGLE) @map("marital_status")
+  weddingDate   DateTime?     @map("wedding_date")
+
+  spouseId String? @unique @map("spouse_id")
+  spouse   Member? @relation("SpouseRelation", fields: [spouseId], references: [id])
+  spouseOf Member? @relation("SpouseRelation")
+
+  churchId String
+  church   Church @relation(fields: [churchId], references: [id])
+
+  ministryMembers   MinistryMember[]
+  serviceVolunteers ServiceVolunteer[]
+
+  @@index([churchId])
+  @@map("members")
+}
+
+model Visitor {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name        String
+  phone       String?
+  visitDate   DateTime @default(now()) @map("visit_date")
+  observation String?
+
+  status VisitorStatus @default(NEW)
+
+  churchId String
+  church   Church @relation(fields: [churchId], references: [id])
+
+  @@index([churchId])
+  @@map("visitors")
+}
+
+enum VisitorStatus {
+  NEW
+  CONTACTED
+  FREQUENT
+  CONVERTED
+}
+
+model Ministry {
+  id   String @id @default(uuid())
+  name String
+
+  churchId String
+  church   Church @relation(fields: [churchId], references: [id])
+
+  members MinistryMember[]
+
+  @@map("ministries")
+}
+
+model MinistryMember {
+  id   String @id @default(uuid())
+  role String
+
+  memberId String
+  member   Member @relation(fields: [memberId], references: [id])
+
+  ministryId String
+  ministry   Ministry @relation(fields: [ministryId], references: [id])
+
+  @@unique([memberId, ministryId, role])
+  @@map("ministry_members")
+}
+
+model Song {
+  id     String  @id @default(uuid())
+  title  String
+  artist String?
+  bpm    Int?
+  key    String?
+  link   String?
+  lyrics String? @db.Text
+
+  churchId String
+  church   Church @relation(fields: [churchId], references: [id])
+
+  services ServiceSong[]
+
+  @@map("songs")
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  date        DateTime
+  title       String
+  description String?
+
+  churchId String
+  church   Church @relation(fields: [churchId], references: [id])
+
+  team    ServiceVolunteer[]
+  setlist ServiceSong[]
+
+  @@map("services")
+}
+
+model ServiceVolunteer {
+  id        String  @id @default(uuid())
+  role      String
+  confirmed Boolean @default(false)
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  memberId String
+  member   Member @relation(fields: [memberId], references: [id])
+
+  @@map("service_volunteers")
+}
+
+model ServiceSong {
+  id    String  @id @default(uuid())
+  order Int
+  key   String?
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  songId String
+  song   Song   @relation(fields: [songId], references: [id])
+
+  @@map("service_songs")
+}
