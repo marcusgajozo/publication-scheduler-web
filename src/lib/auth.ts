@@ -1,17 +1,20 @@
-import { PUBLICATION_SCHEDULER_API_URL, JWT_SECRET } from "@/constants/env";
+import { AUTH_SECRET } from "@/constants/env";
+import { post } from "@/util/methods-client-http";
+import { jwtDecode } from "jwt-decode";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { jwtDecode } from "jwt-decode";
 
-type CustomUser = {
+type User = {
   id: string;
   email: string;
-  name: string;
-  accessToken: string;
+  is_admin: boolean;
+  access_token: string;
 };
 
+type JwtDecode = Omit<User, "access_token"> & { sub: string };
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  secret: JWT_SECRET,
+  secret: AUTH_SECRET,
   providers: [
     Credentials({
       credentials: {
@@ -20,34 +23,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
-          const res = await fetch(`${PUBLICATION_SCHEDULER_API_URL}/sign-in`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: credentials?.email,
-              password: credentials?.password,
-            }),
+          const res = await post<{ token: string }>("/sign-in", {
+            email: credentials?.email,
+            password: credentials?.password,
           });
 
-          if (!res.ok) {
+          if (res.status !== 200) {
             return null;
           }
 
-          const data = await res.json();
+          const data = res.data;
 
-          const decoded = jwtDecode<{
-            sub: string;
-            email: string;
-            name: string;
-          }>(data.accessToken);
+          const decoded = jwtDecode<JwtDecode>(data.token);
 
           return {
             id: decoded.sub,
             email: decoded.email,
-            name: decoded.name,
-            accessToken: data.accessToken,
+            is_admin: decoded.is_admin,
+            access_token: data.token,
           };
         } catch {
           return null;
@@ -60,14 +53,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.accessToken = (user as CustomUser).accessToken;
+        token.access_token = user.access_token;
+        token.is_admin = user.is_admin;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.is_admin = token.is_admin;
+        session.user.access_token = token.access_token;
       }
       return session;
     },
