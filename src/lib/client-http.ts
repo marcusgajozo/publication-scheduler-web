@@ -1,18 +1,26 @@
 import { PUBLICATION_SCHEDULER_API_URL } from "@/constants/env";
 
+type ReturnClientHttp<T> = {
+  data: T;
+  status: number;
+};
+
 export async function clientHttp<T>(
   endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const token = 'dasdasdas'
+  options: RequestInit = {},
+): Promise<ReturnClientHttp<T>> {
+  const { auth } = await import("@/lib/auth");
+  const session = await auth();
+  const accessToken = session?.user?.access_token;
 
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    ...options.headers,
-  };
+  const headers = new Headers(options.headers);
 
-  if (token) {
-    (headers as any)["Authorization"] = `Bearer ${token}`;
+  if (!headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  if (accessToken) {
+    headers.set("Authorization", `Bearer ${accessToken}`);
   }
 
   const config: RequestInit = {
@@ -20,9 +28,7 @@ export async function clientHttp<T>(
     headers,
   };
 
-  const url = endpoint.startsWith("/")
-    ? `${PUBLICATION_SCHEDULER_API_URL}${endpoint}`
-    : `${PUBLICATION_SCHEDULER_API_URL}/${endpoint}`;
+  const url = PUBLICATION_SCHEDULER_API_URL?.concat(endpoint) as string;
 
   try {
     const response = await fetch(url, config);
@@ -40,13 +46,11 @@ export async function clientHttp<T>(
       throw new Error(errorMessage);
     }
 
-    if (response.status === 204) {
-      return {} as T;
-    }
-
-    return response.json() as Promise<T>;
+    return {
+      data: (await response.json()) as T,
+      status: response.status,
+    };
   } catch (error) {
-    console.error("Erro na requisição:", error);
     throw error;
   }
 }
