@@ -1,8 +1,0 @@
-generator erd {
-  provider        = "prisma-erd-generator"
-  output          = "./diagram/ERD.svg"
-  format          = "svg"
-  showForeignKeys = true
-  orientation     = "horizontal"
-  theme           = "simple"
-}
