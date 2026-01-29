@@ -1,4 +1,4 @@
-import { Select } from "@/components/select";
+import { MultiSelect } from "@/components/multi-select";
 import {
   Field,
   FieldDescription,
@@ -12,23 +12,23 @@ import {
   type Path,
 } from "react-hook-form";
 
-interface FormSelectProps<T extends FieldValues> extends React.ComponentProps<
-  typeof Select
-> {
+interface FormMultiSelectProps<
+  T extends FieldValues,
+> extends React.ComponentProps<typeof MultiSelect> {
   control: Control<T>;
   name: Path<T>;
   label?: string;
   description?: string;
 }
 
-export function FormSelect<T extends FieldValues>({
+export function FormMultiSelect<T extends FieldValues>({
   control,
   name,
   label,
   description,
-  onValueChange,
+  onValuesChange,
   ...selectProps
-}: FormSelectProps<T>) {
+}: FormMultiSelectProps<T>) {
   return (
     <Controller
       name={name}
@@ -36,13 +36,13 @@ export function FormSelect<T extends FieldValues>({
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
           {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
-          <Select
+          <MultiSelect
             {...selectProps}
             id={field.name}
-            value={field.value}
-            onValueChange={(value) => {
+            values={field.value}
+            onValuesChange={(value) => {
               field.onChange(value);
-              onValueChange?.(value);
+              onValuesChange?.(value);
             }}
             aria-invalid={fieldState.invalid}
           />
