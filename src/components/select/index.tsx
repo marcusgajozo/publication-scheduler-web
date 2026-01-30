@@ -84,6 +84,7 @@ export function Select({
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem
+                  id={option.value}
                   key={option.value}
                   value={option.label}
                   disabled={option.disabled}
