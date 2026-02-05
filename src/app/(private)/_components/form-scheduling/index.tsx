@@ -9,6 +9,7 @@ import { z } from "zod";
 import { formSchema } from "../../_schemas/form.schema";
 import { CONTENT_TYPES, MEDIA_TYPES, PLATFORMS } from "../../_constants/form";
 import { FormSelect } from "@/components/form/form-select";
+import { useMemo } from "react";
 
 export default function FormScheduling() {
   const methods = useForm<z.input<typeof formSchema>>({
@@ -18,6 +19,12 @@ export default function FormScheduling() {
   const handleSubmit = methods.handleSubmit((data) => {
     console.log(data);
   });
+
+  const contentType = methods.watch("contentType");
+
+  const isDisabledMediaType = useMemo(() => {
+    return !contentType;
+  }, [contentType]);
 
   return (
     <form
@@ -76,6 +83,7 @@ export default function FormScheduling() {
         placeholder="Tipo de mídia"
         options={MEDIA_TYPES}
         data-testid="select-media-type"
+        disabled={isDisabledMediaType}
       />
       <FormInput
         control={methods.control}

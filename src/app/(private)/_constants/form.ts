@@ -7,7 +7,7 @@ export const PLATFORMS = [
 export const CONTENT_TYPES = [
   { value: "Reel", label: "Reel / Video " },
   { value: "Story", label: "Story" },
-  { value: "Carousel", label: "Carrossel" },
+  { value: "Carousel", label: "Carousel" },
   { value: "Post", label: "Post / Group" },
 ];
 
