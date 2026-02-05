@@ -5,16 +5,22 @@ describe("Page / (E2E)", () => {
   });
 
   it("should show form to create a new shedulling", () => {
-    cy.get("#title").scrollIntoView().should("be.visible");
-    cy.get("#publishNow").scrollIntoView().should("be.visible");
-    cy.get("#scheduleDateTime").scrollIntoView().should("be.visible");
-    cy.get("#repeat").scrollIntoView().should("be.visible");
-    cy.get("#platforms").scrollIntoView().should("be.visible");
-    cy.get("#contentType").scrollIntoView().should("be.visible");
-    cy.get("#mediaType").scrollIntoView().should("be.visible");
-    cy.get("#media").scrollIntoView().should("be.visible");
-    cy.get("#caption").scrollIntoView().should("be.visible");
-    cy.get("#btnSubmit").should("be.visible");
+    cy.getByTestId("input-title").scrollIntoView().should("be.visible");
+    cy.getByTestId("checkbox-publish-now")
+      .scrollIntoView()
+      .should("be.visible");
+    cy.getByTestId("checkbox-repeat").scrollIntoView().should("be.visible");
+    cy.getByTestId("input-schedule-date-time")
+      .scrollIntoView()
+      .should("be.visible");
+    cy.getByTestId("multi-select-platforms")
+      .scrollIntoView()
+      .should("be.visible");
+    cy.getByTestId("select-content-type").scrollIntoView().should("be.visible");
+    cy.getByTestId("select-media-type").scrollIntoView().should("be.visible");
+    cy.getByTestId("input-media").scrollIntoView().should("be.visible");
+    cy.getByTestId("input-caption").scrollIntoView().should("be.visible");
+    cy.getByTestId("btn-submit").should("be.visible");
   });
 
   it("should select Instagram, WhatsApp and Facebook options in the multiselect", () => {

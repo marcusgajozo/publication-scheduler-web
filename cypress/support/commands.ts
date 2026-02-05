@@ -5,6 +5,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       login(): Chainable<void>;
+      getByTestId(selector: string): Chainable<JQuery<HTMLElement>>;
     }
   }
 }
@@ -21,10 +22,14 @@ Cypress.Commands.add("login", () => {
 
   cy.session("nextauth-session", () => {
     cy.visit("/sign-in");
-    cy.get('input[name="email"]').type(USER_EMAIL);
-    cy.get('input[name="password"]').type(USER_PASSWORD);
-    cy.get('button[type="submit"]').click();
+    cy.getByTestId("input-email").type(USER_EMAIL);
+    cy.getByTestId("input-password").type(USER_PASSWORD);
+    cy.getByTestId("btn-submit").click();
 
     cy.url().should("not.include", "/sign-in");
   });
+});
+
+Cypress.Commands.add("getByTestId", (selector) => {
+  return cy.get(`[data-testid="${selector}"]`);
 });

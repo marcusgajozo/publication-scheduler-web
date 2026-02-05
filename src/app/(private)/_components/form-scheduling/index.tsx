@@ -31,18 +31,26 @@ export default function FormScheduling() {
         name="title"
         label="Título"
         placeholder="Título da publicação"
+        data-testid="input-title"
       />
       <FormCheckbox
         control={methods.control}
         name="publishNow"
         label="Publicar agora"
+        data-testid="checkbox-publish-now"
       />
-      <FormCheckbox control={methods.control} name="repeat" label="Repetir" />
+      <FormCheckbox
+        control={methods.control}
+        name="repeat"
+        label="Repetir"
+        data-testid="checkbox-repeat"
+      />
       <FormInput
         control={methods.control}
         name="scheduleDateTime"
         label="Data e hora"
         placeholder="Data e hora da publicação"
+        data-testid="input-schedule-date-time"
       />
       <FormMultiSelect
         control={methods.control}
@@ -51,6 +59,7 @@ export default function FormScheduling() {
         placeholder="Plataformas"
         searchable
         options={PLATFORMS}
+        data-testid="multi-select-platforms"
       />
       <FormSelect
         control={methods.control}
@@ -58,6 +67,7 @@ export default function FormScheduling() {
         label="Tipo de conteúdo"
         placeholder="Tipo de conteúdo"
         options={CONTENT_TYPES}
+        data-testid="select-content-type"
       />
       <FormSelect
         control={methods.control}
@@ -65,6 +75,7 @@ export default function FormScheduling() {
         label="Tipo de mídia"
         placeholder="Tipo de mídia"
         options={MEDIA_TYPES}
+        data-testid="select-media-type"
       />
       <FormInput
         control={methods.control}
@@ -72,12 +83,14 @@ export default function FormScheduling() {
         label="Mídia"
         placeholder="Mídia"
         type="file"
+        data-testid="input-media"
       />
       <FormInput
         control={methods.control}
         name="caption"
         label="Legenda"
         placeholder="Legenda"
+        data-testid="input-caption"
       />
     </form>
   );

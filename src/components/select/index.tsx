@@ -48,7 +48,7 @@ export function Select({
   className,
   disabled = false,
   searchable = false,
-  id,
+  ...props
 }: SelectProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -58,7 +58,7 @@ export function Select({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          id={id}
+          {...props}
           variant="outline"
           role="combobox"
           aria-expanded={open}

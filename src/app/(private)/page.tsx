@@ -34,6 +34,7 @@ export default function RegisterPublicationPage() {
             id="btnSubmit"
             className="w-full"
             form="scheduling-form"
+            data-testid="btn-submit"
           >
             Agendar publicação
           </Button>

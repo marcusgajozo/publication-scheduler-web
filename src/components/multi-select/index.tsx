@@ -52,6 +52,7 @@ export function MultiSelect({
   maxDisplay = 3,
   searchable = false,
   id,
+  ...props
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -90,6 +91,7 @@ export function MultiSelect({
             !values.length && "text-muted-foreground",
             className,
           )}
+          {...props}
         >
           <div className="flex flex-wrap gap-1 items-center flex-1">
             {selectedOptions.length === 0 ? (

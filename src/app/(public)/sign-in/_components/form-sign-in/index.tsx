@@ -37,7 +37,12 @@ export function FormSignIn() {
       )}
 
       <div className="space-y-2">
-        <FormInput label="Email" control={methods.control} name="email" />
+        <FormInput
+          label="Email"
+          control={methods.control}
+          name="email"
+          data-testid="input-email"
+        />
       </div>
 
       <div className="space-y-2">
@@ -46,6 +51,7 @@ export function FormSignIn() {
           control={methods.control}
           name="password"
           type="password"
+          data-testid="input-password"
         />
       </div>
 
@@ -59,7 +65,12 @@ export function FormSignIn() {
         </Label>
       </div>
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={isLoading}
+        data-testid="btn-submit"
+      >
         {isLoading ? "Entrando..." : "Entrar"}
       </Button>
 
