@@ -20,11 +20,21 @@ export default function FormScheduling() {
     console.log(data);
   });
 
+  const platforms = methods.watch("platforms");
   const contentType = methods.watch("contentType");
+  const mediaType = methods.watch("mediaType");
+
+  const isDisabledContentType = useMemo(() => {
+    return platforms?.length === 0;
+  }, [platforms]);
 
   const isDisabledMediaType = useMemo(() => {
     return !contentType;
   }, [contentType]);
+
+  const isDisabledMedia = useMemo(() => {
+    return mediaType === "text";
+  }, [mediaType]);
 
   return (
     <form
@@ -75,6 +85,7 @@ export default function FormScheduling() {
         placeholder="Tipo de conteúdo"
         options={CONTENT_TYPES}
         data-testid="select-content-type"
+        disabled={isDisabledContentType}
       />
       <FormSelect
         control={methods.control}
@@ -92,6 +103,7 @@ export default function FormScheduling() {
         placeholder="Mídia"
         type="file"
         data-testid="input-media"
+        disabled={isDisabledMedia}
       />
       <FormInput
         control={methods.control}
